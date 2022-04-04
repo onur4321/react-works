@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
-import Person from './Person/Person';
-import person from './Person/Person';
+import Radium from 'radium';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit'
+import { StyleRoot } from 'radium';
+
 
 class App extends Component {
   state = {
@@ -47,44 +50,40 @@ class App extends Component {
 
   render () {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color : 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
-    };
+      cursor: 'pointer',
+      ':hover' : {
+        backgroundColor : 'lightgreen',
+        color: 'black'
+      }
+    }; 
 
     let persons = null;
 
     if(this.state.showPersons) {
-      persons = (
-        <div >                 
-          {this.state.persons.map((person, index) => {
-            return <Person 
-              click={() => this.deletePersonHandler(index)}
-              name={person.name} 
-              age={person.age} 
-              key={person.id}
-              changed={(event) => this.nameChangedHandler(event, person.id)} />
-          })}                   
-        </div>
-      );
+      persons = <Persons 
+          persons ={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler} />;
     }
 
     return (
+      <StyleRoot>
       <div className="App">
-        <h1>hi, react app</h1>
-        <p>this is really working!</p>
-        <button 
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>        
+        <Cockpit 
+        showPersons={this.state.showPersons}
+        persons={this.state.persons}
+        clicked={this.togglePersonsHandler} />
           
-        {persons}
-
-       
+        {persons}       
       </div>
+      </StyleRoot>
     );
   }
 }
  
-export default App;
+export default Radium(App);
